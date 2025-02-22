@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クリップボードからアドレス変換</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        input[type="text"] {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #errorMessage {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="addressInput" placeholder="ttps://example.com">
+    <button onclick="createLink()">リンクに移動</button>
+    <div id="errorMessage"></div>
+
+    <script>
+        const inputField = document.getElementById("addressInput");
+        const errorMessage = document.getElementById("errorMessage");
+
+        // ページロード時にクリップボードを確認
+        window.onload = async function() {
+            if (!navigator.clipboard || !navigator.clipboard.readText) {
+                errorMessage.textContent = "クリップボード機能がサポートされていません";
+                return;
+            }
+
+            try {
+                const clipboardText = await navigator.clipboard.readText();
+                console.log("クリップボード内容:", clipboardText); // デバッグ用
+                
+                if (clipboardText && clipboardText.startsWith("ttps://")) {
+                    inputField.value = clipboardText;
+                    errorMessage.textContent = "クリップボードからアドレスを読み込みました";
+                } else {
+                    errorMessage.textContent = "クリップボードに有効なアドレスが見つかりません";
+                }
+            } catch (err) {
+                console.error("クリップボード読み取りエラー:", err);
+                errorMessage.textContent = "クリップボードの読み取りに失敗しました";
+            }
+        };
+
+        function createLink() {
+            let input = inputField.value.trim();
+            
+            if (!input) {
+                errorMessage.textContent = "アドレスを入力してください";
+                return;
+            }
+
+            // 最初の"h"がなければ追加
+            if (!input.startsWith("h") && input.length > 0) {
+                input = "h" + input;
+            }
+            
+            // "http"で始まらない場合、完全なURLにする
+            if (!input.startsWith("http://") && !input.startsWith("https://")) {
+                input = "http://" + input;
+            }
+            
+            // リンクに移動
+            errorMessage.textContent = "";
+            window.location.href = input;
+        }
+
+        // Enterキーでボタンを押せるようにする
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                createLink();
+            }
+        });
+    </script>
+</body>
+</html>
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
