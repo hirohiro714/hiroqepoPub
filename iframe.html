@@ -71,6 +71,13 @@
         const message = document.getElementById("message");
         const previewFrame = document.getElementById("previewFrame");
 
+        
+        //アドレスをリセット
+        function resetAdrress() {
+            inputField.value="";
+            message.textContent = "クリップボードのアドレスをここに貼り付けてください”;
+            message.style.color = "#333";
+        }
         function showLinkInIframe() {
             let input = inputField.value.trim();
             
@@ -112,12 +119,6 @@
             message.style.color = "#333";
         });
 
-        //アドレスをリセット
-        function resetAdrress() {
-            inputField.value="";
-            message.textContent = "クリップボードのアドレスをここに貼り付けてください”;
-            message.style.color = "#333";
-        };
     </script>
 </body>
 </html>
