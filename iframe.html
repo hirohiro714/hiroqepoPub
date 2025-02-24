@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アドレス変換ページ（iframe表示2）</title>
+    <title>アドレス変換3</title>
     <style>
         body {
             display: flex;
@@ -61,7 +61,7 @@
     <input type="text" id="addressInput" placeholder="クリップボードから貼り付け（例: ttps://example.com）">
     <div class="button-container">
         <button onclick="showLinkInIframe()">ページを表示</button>
-        <button onclick="resetAdrress()">アドレスをリセット</button>
+        <button onclick="resetAddress()">アドレスをリセット</button>
     </div>
     <div id="message">クリップボードのアドレスをここに貼り付けてください</div>
     <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
@@ -73,9 +73,9 @@
 
         
         //アドレスをリセット
-        function resetAdrress() {
+        function resetAddress() {
             inputField.value="";
-            message.textContent = "クリップボードのアドレスをここに貼り付けてください”;
+            message.textContent = "クリップボードのアドレスをここに貼り付けてください";
             message.style.color = "#333";
         }
         function showLinkInIframe() {
