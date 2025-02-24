@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アドレス変換ページ（iframe表示）</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        input[type="text"] {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #previewFrame {
+            width: 90%;
+            max-width: 600px;
+            height: 50vh;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            display: none; /* 最初は非表示 */
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="addressInput" placeholder="クリップボードから貼り付け（例: ttps://example.com）">
+    <button onclick="showLinkInIframe()">ページを表示</button>
+    <div id="message">クリップボードのアドレスをここに貼り付けてください</div>
+    <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+
+    <script>
+        const inputField = document.getElementById("addressInput");
+        const message = document.getElementById("message");
+        const previewFrame = document.getElementById("previewFrame");
+
+        function showLinkInIframe() {
+            let input = inputField.value.trim();
+            
+            if (!input) {
+                message.textContent = "アドレスを入力してください";
+                message.style.color = "red";
+                return;
+            }
+
+            // "ttps://"を"https://"に変換、または"h"を追加
+            if (input.startsWith("ttps://")) {
+                input = "h" + input;
+            } else if (!input.startsWith("h") && input.length > 0) {
+                input = "h" + input;
+            }
+
+            // "http://"または"https://"で始まらない場合、補完
+            if (!input.startsWith("http://") && !input.startsWith("https://")) {
+                input = "http://" + input;
+            }
+
+            // iframeにURLを設定して表示
+            message.textContent = "表示中: " + input;
+            message.style.color = "green";
+            previewFrame.src = input;
+            previewFrame.style.display = "block"; // iframeを表示
+        }
+
+        // Enterキーでボタンを押せるようにする
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                showLinkInIframe();
+            }
+        });
+
+        // 入力時にメッセージをクリア
+        inputField.addEventListener("input", function() {
+            message.textContent = "クリップボードのアドレスをここに貼り付けてください";
+            message.style.color = "#333";
+        });
+    </script>
+</body>
+</html>
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
