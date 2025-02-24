@@ -56,6 +56,7 @@
 <body>
     <input type="text" id="addressInput" placeholder="クリップボードから貼り付け（例: ttps://example.com）">
     <button onclick="showLinkInIframe()">ページを表示</button>
+    <button onclick="resetAdrress()">アドレスをリセット</button>
     <div id="message">クリップボードのアドレスをここに貼り付けてください</div>
     <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
 
@@ -104,6 +105,13 @@
             message.textContent = "クリップボードのアドレスをここに貼り付けてください";
             message.style.color = "#333";
         });
+
+        //アドレスをリセット
+        function resetAdrress(){
+            inputField.value="";
+            message.textContent = "クリップボードのアドレスをここに貼り付けてください”;
+            message.style.color = "#333";
+        }
     </script>
 </body>
 </html>
