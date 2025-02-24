@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アドレス変換ページ（iframe表示1）</title>
+    <title>アドレス変換ページ（iframe表示2）</title>
     <style>
         body {
             display: flex;
@@ -24,6 +24,11 @@
             border: 2px solid #ccc;
             border-radius: 5px;
         }
+        .button-container {
+            display: flex;   
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -32,7 +37,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-bottom: 20px;
         }
         button:hover {
             background-color: #45a049;
@@ -55,8 +59,10 @@
 </head>
 <body>
     <input type="text" id="addressInput" placeholder="クリップボードから貼り付け（例: ttps://example.com）">
-    <button onclick="showLinkInIframe()">ページを表示</button>
-    <button onclick="resetAdrress()">アドレスをリセット</button>
+    <div class="button-container">
+        <button onclick="showLinkInIframe()">ページを表示</button>
+        <button onclick="resetAdrress()">アドレスをリセット</button>
+    </div>
     <div id="message">クリップボードのアドレスをここに貼り付けてください</div>
     <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
 
