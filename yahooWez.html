@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yahoo 天気アプリ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+        .header select {
+            margin: 5px;
+            padding: 5px;
+        }
+        .content {
+            margin-top: 120px; /* ヘッダー分のスペース */
+            padding: 20px;
+            flex-grow: 1;
+            text-align: center;
+        }
+        #weatherInfo {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>地域: サンディエゴ, CA</div>
+        <div id="currentTime"></div>
+        <select id="infoSelect" onchange="updateDisplay()">
+            <option value="temp">温度</option>
+            <option value="condition">天気状況</option>
+            <option value="both">両方</option>
+        </select>
+    </div>
+    <div class="content">
+        <div id="weatherInfo">天気情報を取得中...</div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // 現在時刻を更新（毎秒）
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('ja-JP', { 
+                timeZone: 'America/Los_Angeles', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            $('#currentTime').text(`時間: ${timeString}`);
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 天気情報を取得
+        let weatherData = {};
+        const queryURL = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20=%202487889&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+        $.getJSON(queryURL, function(data) {
+            const result = data.query.results.channel;
+            weatherData = {
+                temp: result.item.condition.temp + "°F",
+                condition: result.item.condition.text
+            };
+            updateDisplay();
+        }).fail(function() {
+            $('#weatherInfo').text("天気情報の取得に失敗しました。");
+        });
+
+        // 表示内容を更新
+        function updateDisplay() {
+            const selectValue = $('#infoSelect').val();
+            let displayText = '';
+            
+            if (selectValue === 'temp') {
+                displayText = `温度: ${weatherData.temp || '取得中...'}`;
+            } else if (selectValue === 'condition') {
+                displayText = `天気状況: ${weatherData.condition || '取得中...'}`;
+            } else {
+                displayText = `温度: ${weatherData.temp || '取得中...'}<br>天気状況: ${weatherData.condition || '取得中...'}`;
+            }
+            
+            $('#weatherInfo').html(displayText);
+        }
+    </script>
+</body>
+</html>
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
